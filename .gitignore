@@ -1,0 +1,10 @@
+.DS_Store
+
+*.aux
+*.fdb_latexmk
+*.fls
+*.gz
+*.log
+*.xdv
+
+.vscode/settings.json

@@ -1,0 +1,74 @@
+{
+	"Environment.Question": {
+		"prefix": "\\q",
+		"body": [
+			"\\begin{Question}[${1:Answer}]",
+			"\t$0",
+			"\\end{Question}"
+		]
+	},
+	"Environment.ChoiceQuestion": {
+		"prefix": "\\cq",
+		"body": [
+			"\\begin{ChoiceQuestion}[${1:The number of the answer}]",
+			"\t$0",
+			"\\end{ChoiceQuestion}"
+		],
+		"description": "Choice question environment."
+	},
+	"Environment.JudgeQuestion": {
+		"prefix": "\\jq",
+		"body": [
+			"\\begin{JudgeQuestion}[${1:T or F}]",
+			"\t$0",
+			"\\end{JudgeQuestion}"
+		],
+		"description": "Judge question environment."
+	},
+	"Environment.JudgeQuestion.T": {
+		"prefix": "\\jqt",
+		"body": [
+			"\\begin{JudgeQuestion}[T]",
+			"\t$0",
+			"\\end{JudgeQuestion}"
+		],
+		"description": "Judge question environment."
+	},
+	"Environment.JudgeQuestion.F": {
+		"prefix": "\\jqf",
+		"body": [
+			"\\begin{JudgeQuestion}[F]",
+			"\t$0",
+			"\\end{JudgeQuestion}"
+		],
+		"description": "Judge question environment."
+	},
+	"Environment.Choices": {
+		"prefix": "\\cs",
+		"body": [
+			"\\begin{Choices}",
+			"\t\\Choice{$0}",
+			"\\end{Choices}"
+		],
+		"description": "Choices environment."
+	},
+	"Environment.Analysis": {
+		"prefix": "\\ana",
+		"body": [
+			"\\begin{Analysis}",
+			"\t$0",
+			"\\end{Analysis}"
+		],
+		"description": "Analysis environment."
+	},
+	"Component.Choice": {
+		"prefix": "\\c",
+		"body": "\\Choice{$0}",
+		"description": "Choice component."
+	},
+	"Component.Blank": {
+		"prefix": "\\blank",
+		"body": "\\Blank",
+		"description": "Blank component."
+	}
+}

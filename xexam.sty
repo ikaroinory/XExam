@@ -1,0 +1,305 @@
+%----------------------------------------------------------------------------------------------------%
+%                                                                                                    %
+% XExam                                                                                              %
+%     -- A package for creating question books                                                       %
+%                                                                                                    %
+%----------------------------------------------------------------------------------------------------%
+
+%----------------------------------------------------------------------------------------------------%
+%
+% -> Package Clarification
+%
+%----------------------------------------------------------------------------------------------------%
+\NeedsTeXFormat{LaTeX2e}
+
+\ProvidesPackage{xexam}[2024/04/01 v0.1 LaTeX package]
+
+%----------------------------------------------------------------------------------------------------%
+%
+% -> Require Packages
+%
+%----------------------------------------------------------------------------------------------------%
+\RequirePackage{ifthen}
+
+\RequirePackage{color}
+\RequirePackage{amssymb}
+
+\RequirePackage{enumitem}
+\RequirePackage{multicol}
+
+%----------------------------------------------------------------------------------------------------%
+%
+% -> Settings
+%
+%----------------------------------------------------------------------------------------------------%
+% Eliminate blank lines before and after makecols environment
+\AtBeginDocument{\setlength{\multicolsep}{0pt}}
+
+%----------------------------------------------------------------------------------------------------%
+%
+% -> Options
+%
+%----------------------------------------------------------------------------------------------------%
+\newboolean{Option@DisplayAnswer}
+\setboolean{Option@DisplayAnswer}{false}
+
+\DeclareOption{answer}{\setboolean{Option@DisplayAnswer}{true}}
+\ProcessOptions\relax
+
+%----------------------------------------------------------------------------------------------------%
+%
+% -> Counters
+%
+%----------------------------------------------------------------------------------------------------%
+\newcounter{Counter@Question}
+\newcounter{Counter@CurrentChoice}
+
+%----------------------------------------------------------------------------------------------------%
+%
+% -> Variables
+%
+%----------------------------------------------------------------------------------------------------%
+\def\Variable@Answer@Default{__Undefined__}
+\gdef\Variable@Answer{\Variable@Answer@Default}
+
+%----------------------------------------------------------------------------------------------------%
+%
+% -> Extension Commands
+%
+%----------------------------------------------------------------------------------------------------%
+\newcommand{\Command@NumberToUpperLetter}[1]{%
+    \ifcase#1%
+            {\color{red}<Undefined Case.>}%
+        \or%
+            A%
+        \or%
+            B%
+        \or%
+            C%
+        \or%
+            D%
+        \or%
+            E%
+        \or%
+            F%
+        \or%
+            G%
+        \or%
+            H%
+        \or%
+            I%
+        \or%
+            J%
+        \or%
+            K%
+        \or%
+            L%
+        \or%
+            M%
+        \or%
+            N%
+        \or%
+            O%
+        \or%
+            P%
+        \or%
+            Q%
+        \or%
+            R%
+        \or%
+            S%
+        \or%
+            T%
+        \or%
+            U%
+        \or%
+            V%
+        \or%
+            W%
+        \or%
+            X%
+        \or%
+            Y%
+        \or%
+            Z%
+    \else%
+        {\color{red}<Undefined Case.>}%
+    \fi%
+}
+
+\newcommand{\Command@NumberToLowerLetter}[1]{%
+    \ifcase#1%
+            {\color{red}<Undefined Case.>}%
+        \or%
+            a%
+        \or%
+            b%
+        \or%
+            c%
+        \or%
+            d%
+        \or%
+            e%
+        \or%
+            f%
+        \or%
+            g%
+        \or%
+            h%
+        \or%
+            i%
+        \or%
+            j%
+        \or%
+            k%
+        \or%
+            l%
+        \or%
+            m%
+        \or%
+            n%
+        \or%
+            o%
+        \or%
+            p%
+        \or%
+            q%
+        \or%
+            r%
+        \or%
+            s%
+        \or%
+            t%
+        \or%
+            u%
+        \or%
+            v%
+        \or%
+            w%
+        \or%
+            x%
+        \or%
+            y%
+        \or%
+            z%
+    \else%
+        {\color{red}<Undefined Case.>}%
+    \fi%
+}
+
+\newcommand{\NumberToLetter}[2][upper]{%
+    \ifthenelse{\equal{#1}{upper}}{%
+        \Command@NumberToUpperLetter{#2}%
+    }{%
+        \Command@NumberToLowerLetter{#2}%
+    }%
+}
+
+%----------------------------------------------------------------------------------------------------%
+%
+% -> Components
+%
+%----------------------------------------------------------------------------------------------------%
+\newcommand{\Component@Underline}[2][1cm]{%
+    \underline{\makebox[#1][c]{#2}}%
+}
+
+\newcommand{\Blank}[1][1cm]{%
+    \Component@Underline[#1]{}%
+}
+
+\newcommand{\Choice}[1]{%
+    \stepcounter{Counter@CurrentChoice}%
+    \ifnum\value{Counter@CurrentChoice}>1%
+        \\%
+    \fi%
+    \ifthenelse{%
+        \boolean{Option@DisplayAnswer}%
+        \and%
+        \equal{\value{Counter@CurrentChoice}}{\@Answer}%
+    }{%
+        \noindent \textcolor{red}{\Alph{Counter@CurrentChoice}.} {#1}.%
+    }{%
+        \noindent \Alph{Counter@CurrentChoice}. {#1}.%
+    }%
+}
+
+\newcommand{\Component@JudgeAnswer}[1]{%
+    \ifthenelse{\equal{#1}{T}\or\equal{#1}{t}}{$\checkmark$}{}%
+    \ifthenelse{\equal{#1}{F}\or\equal{#1}{f}}{$\times$}{}%
+}
+
+%----------------------------------------------------------------------------------------------------%
+%
+% -> Environments
+%
+%----------------------------------------------------------------------------------------------------%
+\NewDocumentEnvironment{Question}{O{} +b}{
+    \ifx#1\undefined\else\gdef\Variable@Answer{#1}\fi
+    \refstepcounter{Counter@Question}
+    \ifthenelse{\not\boolean{Option@DisplayAnswer}}{%
+        \begin{enumerate}[
+            label = {\arabic{Counter@Question}.},
+            left  = 0pt,
+            nosep
+        ]
+            \item {#2}
+    }{}
+}{%
+    \ifthenelse{\not\boolean{Option@DisplayAnswer}}{%
+        \end{enumerate}%
+    }{}%
+}
+
+\newenvironment{ChoiceQuestion}[1][]{
+    \ifx#1\undefined\else\def\@Answer{#1}\fi
+    \begin{Question}[\NumberToLetter{#1}]
+}{
+    \end{Question}
+    \let\@Answer\undefined
+}
+
+\newenvironment{JudgeQuestion}[1][]{
+    \ifx#1\undefined\else\def\@Answer{#1}\fi
+    \begin{Question}[\Component@JudgeAnswer{#1}]
+        \Blank
+}{
+    \end{Question}
+    \let\@Answer\undefined
+}
+
+% \newenvironment{JudgeQuestion}[1][]{
+%     \ifthenelse{\equal{#1}{T}\or\equal{#1}{t}}{\def\@Answer{$\checkmark$}}{}
+%     \ifthenelse{\equal{#1}{F}\or\equal{#1}{f}}{\def\@Answer{$\times$}}{}
+%     \begin{Question}[\@Answer]
+%         \Blank
+% }{
+%     \end{Question}
+%     \let\@Answer\undefined
+% }
+
+\newenvironment{Choices}[1][4]{
+    \def\@ColumnCount{#1}
+    \setcounter{Counter@CurrentChoice}{0}
+    \begin{multicols}{\@ColumnCount}
+}{
+    \end{multicols}
+    \let\@ColumnCount\undefined
+}
+
+\NewDocumentEnvironment{Analysis}{+b}{
+    \ifthenelse{\boolean{Option@DisplayAnswer}}{%
+        \begin{enumerate}[
+            label = {\arabic{Counter@Question}.},
+            left  = 0pt,
+            nosep
+        ]
+            \item %
+                {\color{red}\textbf{Answer:} }\Variable@Answer.%
+                \par{\color{red}\textbf{Analysis:} }{#1}%
+    }{}%
+}{%
+    \ifthenelse{\boolean{Option@DisplayAnswer}}{%
+        \end{enumerate}
+    }{}%
+}
