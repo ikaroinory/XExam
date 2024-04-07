@@ -67,6 +67,14 @@
 % -> Extension Commands
 %
 %----------------------------------------------------------------------------------------------------%
+\DeclareRobustCommand{\XExam}{%
+    X\kern-0.125em\lower0.7ex%
+    \hbox{E}\kern-0.2em%
+    X\kern-0.1667em\lower-0.5ex%
+    \hbox{A}\kern-0.125em%
+    M%
+}
+
 \newcommand{\Command@NumberToUpperLetter}[1]{%
     \ifcase#1%
             {\color{red}<Undefined Case.>}%

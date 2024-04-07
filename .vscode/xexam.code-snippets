@@ -1,11 +1,17 @@
 {
+	"XExam": {
+		"prefix": "\\xe",
+		"body": "\\XExam",
+		"description": "The XExam logo."
+	},
 	"Environment.Question": {
 		"prefix": "\\q",
 		"body": [
 			"\\begin{Question}[${1:Answer}]",
 			"\t$0",
 			"\\end{Question}"
-		]
+		],
+		"description": "Question environment."
 	},
 	"Environment.ChoiceQuestion": {
 		"prefix": "\\cq",
